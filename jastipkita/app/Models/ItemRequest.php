@@ -9,6 +9,9 @@ class ItemRequest extends Model
 {
     use HasFactory;
 
+    // 👇 Ini baris ajaib yang ditambahin 👇
+    protected $table = 'request_items';
+
     protected $fillable = [
         'user_id',
         'trip_id',

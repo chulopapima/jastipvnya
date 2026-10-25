@@ -8,17 +8,17 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('item_requests', function (Blueprint $table) {
-            $table->unsignedBigInteger('trip_id')->nullable()->after('user_id');
-            $table->integer('jumlah')->default(1)->after('estimasi_harga');
-            $table->string('metode_pembayaran')->default('Transfer Bank / QRIS')->after('keterangan');
-            $table->string('bukti_bayar')->nullable()->after('metode_pembayaran');
+        Schema::table('request_items', function (Blueprint $table) {
+            $table->unsignedBigInteger('trip_id')->nullable();
+            $table->integer('jumlah')->default(1);
+            $table->string('metode_pembayaran')->default('Transfer Bank / QRIS');
+            $table->string('bukti_bayar')->nullable();
         });
     }
 
     public function down(): void
     {
-        Schema::table('item_requests', function (Blueprint $table) {
+        Schema::table('request_items', function (Blueprint $table) {
             $table->dropColumn(['trip_id', 'jumlah', 'metode_pembayaran', 'bukti_bayar']);
         });
     }

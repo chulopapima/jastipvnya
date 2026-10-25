@@ -6,23 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::table('item_requests', function (Blueprint $table) {
-            $table->string('status')->default('menunggu')->change();
+        Schema::table('request_items', function (Blueprint $table) {
+            // Kita hapus ->change() di sini supaya dia membuat kolom baru
+            $table->string('status')->default('menunggu');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::table('item_requests', function (Blueprint $table) {
-            $table->enum('status', ['menunggu', 'diterima', 'ditolak'])->default('menunggu')->change();
+        Schema::table('request_items', function (Blueprint $table) {
+            $table->dropColumn('status');
         });
     }
 };

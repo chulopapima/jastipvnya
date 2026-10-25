@@ -13,6 +13,17 @@ return new class extends Migration
     {
         Schema::create('request_items', function (Blueprint $table) {
             $table->id();
+            
+            // Ini kolom-kolom wajib yang dari tadi dicariin sama kodingan lain:
+            $table->unsignedBigInteger('user_id');
+            $table->string('nama_barang');
+            $table->integer('estimasi_harga')->nullable();
+            $table->string('destinasi')->nullable();
+            $table->text('keterangan')->nullable();
+            $table->string('foto')->nullable();
+            $table->string('progress_status')->nullable();
+            $table->integer('progress_percent')->default(0);
+            
             $table->timestamps();
         });
     }

@@ -62,18 +62,20 @@ class RequestController extends Controller
         return back()->with('success', 'Pesanan ditolak.');
     }
 
-    // UPDATE PROGRESS / NO RESI OLEH JASTIPER
+    // UPDATE PROGRESS / NO RESI OLEH JASTIPER (SUDAH DIPERBAIKI)
     public function updateProgress(Request $request, $id)
     {
         $item = ItemRequest::findOrFail($id);
         
         $request->validate([
-            'status' => 'required|string',
+            'progress_status' => 'required|string',
+            'progress_percent' => 'required|numeric',
             'no_resi' => 'nullable|string|max:255',
         ]);
 
         $item->update([
-            'status' => $request->status,
+            'progress_status' => $request->progress_status,
+            'progress_percent' => $request->progress_percent,
             'no_resi' => $request->no_resi ?? $item->no_resi,
         ]);
 
@@ -106,7 +108,7 @@ class RequestController extends Controller
         return back()->with('success', 'Request berhasil dibatalkan.');
     }
 
-// CETAK RESI / INVOICE
+    // CETAK RESI / INVOICE
     public function cetakResi($id)
     {
         $itemRequest = ItemRequest::with('user', 'trip')->findOrFail($id);

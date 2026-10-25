@@ -71,7 +71,21 @@
                                     @elseif($req->status == 'diproses')
                                         <span class="inline-block bg-amber-50 text-amber-700 border border-amber-200 px-3 py-1 rounded-full text-xs font-bold">Disetujui / Belum Dibayar</span>
                                     @elseif($req->status == 'diterima' || $req->status == 'selesai')
-                                        <span class="inline-block bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold">Lunas / Diproses Kurir</span>
+                                        <div class="flex flex-col gap-1.5 w-max">
+                                            <span class="inline-block bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold">
+                                                ✔ Lunas
+                                            </span>
+                                            <!-- Menampilkan Detail Progress yang diupdate Jastiper -->
+                                            @if($req->progress_status)
+                                                <span class="text-[11px] font-extrabold text-pink-600 bg-pink-50 px-2 py-0.5 rounded-lg border border-pink-100">
+                                                    📍 {{ $req->progress_status }} ({{ $req->progress_percent }}%)
+                                                </span>
+                                            @else
+                                                <span class="text-[11px] font-bold text-slate-400">
+                                                    📍 Menunggu Proses
+                                                </span>
+                                            @endif
+                                        </div>
                                     @else
                                         <span class="inline-block bg-rose-50 text-rose-700 border border-rose-200 px-3 py-1 rounded-full text-xs font-bold">Ditolak</span>
                                     @endif
@@ -83,15 +97,13 @@
                                             <button type="submit" class="bg-rose-50 hover:bg-rose-500 hover:text-white text-rose-600 px-3 py-1.5 rounded-xl text-xs font-bold transition">Batalkan</button>
                                         </form>
                                     @elseif($req->status == 'diproses')
-                                        <!-- TOMBOL MIDTRANS MUNCUL DI SINI -->
                                         <a href="/request/pay/{{ $req->id }}" class="inline-block bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-xl text-xs font-bold transition shadow-md shadow-pink-500/20">
                                             💳 Bayar via Midtrans
                                         </a>
                                     @elseif($req->status == 'diterima' || $req->status == 'selesai')
                                         <div class="flex items-center justify-center gap-2">
-                                            <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-extrabold">✔ LUNAS</span>
                                             <a href="/request/resi/{{ $req->id }}" target="_blank" class="bg-pink-50 hover:bg-pink-100 text-pink-600 px-3 py-1.5 rounded-xl text-xs font-bold transition">
-                                                🖨️ Resi
+                                                🖨️ Cetak Resi
                                             </a>
                                         </div>
                                     @else

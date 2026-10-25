@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('item_requests', function (Blueprint $table) {
-            $table->string('ukuran')->default('M')->after('nama_barang');
+        Schema::table('request_items', function (Blueprint $table) {
+            $table->string('ukuran')->default('M');
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('item_requests', function (Blueprint $table) {
+        Schema::table('request_items', function (Blueprint $table) {
             $table->dropColumn('ukuran');
         });
     }
