@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Trip;
 use App\Models\ItemRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class TripController extends Controller
@@ -18,7 +17,8 @@ class TripController extends Controller
 
     public function dashboardJastiper()
     {
-        if (Auth::user()->role !== 'jastiper') {
+        // Ganti Auth::user()->role dengan session
+        if (session('user_role') !== 'jastiper') {
             abort(403);
         }
 
@@ -53,12 +53,15 @@ class TripController extends Controller
         ]);
 
         $fotoPath = null;
-        if ($request->hasFile('foto')) {
-            $fotoPath = $request->file('foto')->store('trip_photos', 'public');
-        }
+if ($request->hasFile('foto')) {
+    // Upload ke Cloudinary, bukan ke folder lokal
+    $fotoPath = cloudinary()->upload($request->file('foto')->getRealPath(), [
+        'folder' => 'trip_photos'
+    ])->getSecurePath();
+}
 
         Trip::create([
-            'user_id' => Auth::id(),
+            'user_id' => session('user_id'), // Ganti Auth::id() dengan session
             'destinasi' => $request->destinasi,
             'estimasi_fee' => $request->estimasi_fee,
             'tanggal_berangkat' => $request->tanggal_berangkat,
@@ -76,7 +79,8 @@ class TripController extends Controller
     {
         $trip = Trip::findOrFail($id);
 
-        if (Auth::user()->role !== 'jastiper') {
+        // Ganti Auth::user()->role dengan session
+        if (session('user_role') !== 'jastiper') {
             abort(403);
         }
 
@@ -98,7 +102,8 @@ class TripController extends Controller
 
         $trip = Trip::findOrFail($id);
 
-        if (Auth::user()->role !== 'jastiper') {
+        // Ganti Auth::user()->role dengan session
+        if (session('user_role') !== 'jastiper') {
             abort(403);
         }
 
@@ -127,7 +132,8 @@ class TripController extends Controller
     {
         $trip = Trip::findOrFail($id);
 
-        if (Auth::user()->role !== 'jastiper') {
+        // Ganti Auth::user()->role dengan session
+        if (session('user_role') !== 'jastiper') {
             abort(403);
         }
 

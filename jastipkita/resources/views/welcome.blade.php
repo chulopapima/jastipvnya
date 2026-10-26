@@ -17,12 +17,12 @@
             </div>
             
             <div class="flex items-center gap-3">
-                @auth
-                    <a href="{{ Auth::user()->role === 'jastiper' ? '/dashboard-jastiper' : '/dashboard-pembeli' }}" class="bg-pink-50 text-pink-600 hover:bg-pink-100 px-5 py-2.5 rounded-xl text-sm font-semibold transition">Ke Dashboard</a>
+                <!-- DIGANTI MENGGUNAKAN SESSION -->
+                @if(session('is_logged_in'))
+                    <a href="{{ session('user_role') === 'jastiper' ? '/dashboard-jastiper' : '/dashboard-pembeli' }}" class="bg-pink-50 text-pink-600 hover:bg-pink-100 px-5 py-2.5 rounded-xl text-sm font-semibold transition">Ke Dashboard</a>
                 @else
-                    <a href="/login" class="text-slate-500 hover:text-pink-600 px-4 py-2 text-sm font-semibold transition">Masuk</a>
-                    <a href="/register" class="bg-pink-500 hover:bg-pink-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition shadow-lg shadow-pink-500/20">Daftar</a>
-                @endauth
+                    <a href="/login" class="bg-pink-500 hover:bg-pink-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition shadow-lg shadow-pink-500/20">Masuk / Login</a>
+                @endif
             </div>
         </div>
     </nav>
@@ -105,9 +105,9 @@
                             @endif
                         </div>
                         
-                        <!-- TOMBOL AKSI -->
-                        @auth
-                            @if(auth()->user()->role === 'jastiper')
+                        <!-- TOMBOL AKSI DIGANTI MENGGUNAKAN SESSION -->
+                        @if(session('is_logged_in'))
+                            @if(session('user_role') === 'jastiper')
                                 <div class="pt-4 border-t border-slate-100 flex gap-2">
                                     <a href="/trip/edit/{{ $trip->id }}" class="w-1/2 bg-amber-50 hover:bg-amber-500 hover:text-white text-amber-600 text-center py-3 rounded-xl font-bold text-sm transition">Edit</a>
                                     <form action="/trip/delete/{{ $trip->id }}" method="POST" class="w-1/2" onsubmit="return confirm('Yakin hapus trip ini?');">
@@ -129,7 +129,7 @@
                                     Titip di Sini 🛒
                                 </a>
                             </div>
-                        @endauth
+                        @endif
                     </div>
                 </div>
             @empty
@@ -141,7 +141,7 @@
         </div>
     </main>
 
-    <!-- FOOTER (ALAMAT KANTOR & PEMILIK JASTIP) -->
+    <!-- FOOTER -->
     <footer class="bg-white border-t border-pink-100 mt-20 py-12 px-6">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center text-center md:text-left">
             

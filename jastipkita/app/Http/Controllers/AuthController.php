@@ -3,73 +3,63 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
     public function showLogin()
     {
-        return view('login');
+        return view('auth.login');
     }
 
-    public function login(Request $request)
+    public function processLogin(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+        // Data akun hardcode lengkap dengan ID
+        $accounts = [
+            [
+                'id' => 1, 
+                'email' => 'Pembeli@gmail.com', 
+                'password' => '123', 
+                'role' => 'pembeli', 
+                'name' => 'User Pembeli'
+            ],
+            [
+                'id' => 2, 
+                'email' => 'jastiper@gmail.com', 
+                'password' => '123', 
+                'role' => 'jastiper', 
+                'name' => 'User Jastiper'
+            ],
+        ];
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+        $inputEmail = trim($request->input('email'));
+        $inputPassword = $request->input('password');
 
-            $user = Auth::user();
+        foreach ($accounts as $acc) {
+            if (strtolower($acc['email']) === strtolower($inputEmail) && $acc['password'] === $inputPassword) {
+                
+                // Simpan sesi login
+                session([
+                    'is_logged_in' => true,
+                    'user_id' => $acc['id'],
+                    'user_name' => $acc['name'],
+                    'user_role' => $acc['role'],
+                ]);
 
-            // Pengecekan role secara ketat
-            if ($user->role === 'jastiper') {
-                return redirect()->intended('/dashboard-jastiper');
-            } else {
-                return redirect()->intended('/dashboard-pembeli');
+                // Arahkan ke dashboard
+                if ($acc['role'] === 'pembeli') {
+                    return redirect('/dashboard-pembeli');
+                } else {
+                    return redirect('/dashboard-jastiper');
+                }
             }
         }
 
-        return back()->withErrors([
-            'email' => 'Email atau password salah.',
-        ])->onlyInput('email');
-    }
-
-    public function showRegister()
-    {
-        return view('register');
-    }
-
-    public function register(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
-            'role' => 'required|in:pembeli,jastiper',
-            'no_hp' => 'nullable|string|max:20',
-        ]);
-
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
-            'no_hp' => $request->no_hp,
-        ]);
-
-        return redirect('/login')->with('success', 'Registrasi berhasil! Silakan masuk.');
+        return back()->withErrors(['email' => 'Email atau password salah!'])->withInput();
     }
 
     public function logout(Request $request)
     {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        $request->session()->flush();
         return redirect('/login');
     }
 }

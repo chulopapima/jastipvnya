@@ -3,136 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Jastiper — JastipKita</title>
+    <title>Dashboard Jastiper - JastipKita</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-pink-50/30 text-slate-800 min-h-screen py-8 px-4 sm:px-6 antialiased selection:bg-pink-500 selection:text-white">
-    <div class="max-w-7xl mx-auto space-y-8">
-        
-        <!-- HEADER & NAVIGASI -->
-        <div class="relative w-full bg-white border border-pink-100 rounded-[2rem] overflow-hidden shadow-xl shadow-pink-900/5 p-8 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="text-center md:text-left space-y-2">
-                <div class="inline-flex items-center gap-2 bg-pink-100 text-pink-700 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider mb-2">
-                    Portal Tim Jastiper 🛍️
-                </div>
-                <h1 class="text-3xl font-extrabold text-rose-950 tracking-tight">Halo Jastiper, {{ Auth::user()->name }}!</h1>
-                <p class="text-slate-500 text-sm">Kelola pesanan antar kota dan pantau keuangan tim di sini.</p>
+<body class="bg-pink-50/30 text-slate-800 antialiased min-h-screen pb-20">
+
+    <!-- NAVBAR -->
+    <nav class="bg-white/85 backdrop-blur-xl border-b border-pink-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <a href="/" class="flex items-center gap-3 hover:opacity-80 transition">
+                    <span class="text-2xl">📦</span>
+                    <span class="text-xl font-extrabold text-rose-950 tracking-tight">Jastiper<span class="text-pink-500">Panel</span></span>
+                </a>
             </div>
-            
-            <div class="flex flex-wrap gap-3 justify-center">
-                <a href="/" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-5 py-2.5 rounded-xl text-sm font-semibold transition">🏠 Home</a>
-                <a href="/trip/create" class="bg-pink-50 hover:bg-pink-100 text-pink-600 px-5 py-2.5 rounded-xl text-sm font-bold transition">+ Buka Trip</a>
+            <div class="flex items-center gap-4">
+                <a href="/" class="text-sm font-semibold text-slate-500 hover:text-pink-600 transition">Beranda</a>
                 <form action="/logout" method="POST" class="inline">
                     @csrf
-                    <button type="submit" class="bg-pink-500 hover:bg-pink-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition shadow-lg shadow-pink-500/30">Logout</button>
+                    <button type="submit" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-4 py-2 rounded-xl text-sm font-bold transition">Keluar</button>
                 </form>
             </div>
         </div>
+    </nav>
 
-        <!-- KOTAK STATISTIK KEUANGAN & PENDAPATAN -->
+    <main class="max-w-7xl mx-auto px-6 py-10 space-y-8">
+        
+        <!-- HEADER -->
+        <div class="bg-white border border-pink-100 rounded-3xl p-8 shadow-sm flex justify-between items-center">
+            <div>
+                <div class="inline-flex items-center gap-2 bg-pink-100 text-pink-700 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wide mb-3">Mode Jastiper Aktif</div>
+                <h1 class="text-3xl font-extrabold text-rose-950">Halo, {{ session('user_name') }}! 👋</h1>
+            </div>
+            <div>
+                <a href="/trip/create" class="bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-xl font-bold transition">➕ Buka Trip Baru</a>
+            </div>
+        </div>
+
+        <!-- KOTAK STATISTIK / PENDAPATAN (YANG TADI HILANG) -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Card 1: Total Pendapatan -->
-            <div class="bg-white border border-pink-100 rounded-3xl p-6 shadow-sm flex items-center gap-5">
-                <div class="w-14 h-14 bg-pink-500 text-white rounded-2xl flex items-center justify-center text-2xl shadow-lg shadow-pink-500/20">
-                    💰
-                </div>
+            <div class="bg-white border border-pink-100 rounded-3xl p-6 shadow-sm flex items-center gap-4">
+                <div class="w-14 h-14 bg-blue-50 text-blue-500 flex items-center justify-center text-2xl rounded-2xl">✈️</div>
                 <div>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Pendapatan Tim</p>
-                    <h3 class="text-2xl font-extrabold text-rose-950 mt-1">
-                        Rp {{ number_format($totalPendapatan ?? 0, 0, ',', '.') }}
-                    </h3>
+                    <p class="text-slate-500 text-sm font-medium">Total Trip Dibuka</p>
+                    <p class="text-2xl font-extrabold text-rose-950">{{ $totalTrip ?? 0 }}</p>
+                </div>
+            </div>
+            
+            <div class="bg-white border border-pink-100 rounded-3xl p-6 shadow-sm flex items-center gap-4">
+                <div class="w-14 h-14 bg-green-50 text-green-500 flex items-center justify-center text-2xl rounded-2xl">✅</div>
+                <div>
+                    <p class="text-slate-500 text-sm font-medium">Pesanan Selesai</p>
+                    <p class="text-2xl font-extrabold text-rose-950">{{ $totalPesananSelesai ?? 0 }}</p>
                 </div>
             </div>
 
-            <!-- Card 2: Total Trip Aktif -->
-            <div class="bg-white border border-pink-100 rounded-3xl p-6 shadow-sm flex items-center gap-5">
-                <div class="w-14 h-14 bg-pink-100 text-pink-600 rounded-2xl flex items-center justify-center text-2xl font-bold">
-                    ✈️
-                </div>
+            <div class="bg-white border border-pink-100 rounded-3xl p-6 shadow-sm flex items-center gap-4">
+                <div class="w-14 h-14 bg-amber-50 text-amber-500 flex items-center justify-center text-2xl rounded-2xl">💰</div>
                 <div>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Trip Dibuka</p>
-                    <h3 class="text-2xl font-extrabold text-rose-950 mt-1">
-                        {{ $totalTrip ?? App\Models\Trip::count() }} Trip
-                    </h3>
-                </div>
-            </div>
-
-            <!-- Card 3: Pesanan Masuk -->
-            <div class="bg-white border border-pink-100 rounded-3xl p-6 shadow-sm flex items-center gap-5">
-                <div class="w-14 h-14 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-2xl font-bold">
-                    📦
-                </div>
-                <div>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Request Masuk</p>
-                    <h3 class="text-2xl font-extrabold text-rose-950 mt-1">
-                        {{ App\Models\ItemRequest::count() }} Item
-                    </h3>
+                    <p class="text-slate-500 text-sm font-medium">Estimasi Pendapatan</p>
+                    <p class="text-2xl font-extrabold text-rose-950">Rp {{ number_format($totalPendapatan ?? 0, 0, ',', '.') }}</p>
                 </div>
             </div>
         </div>
 
-        <!-- TABEL KELOLA REQUEST PESANAN -->
-        <div class="bg-white border border-pink-100 rounded-3xl p-6 shadow-sm space-y-5">
-            <h2 class="text-lg font-extrabold text-rose-950 flex items-center gap-2">🔔 Kelola Request (Sistem Kolaborasi Tim)</h2>
+        <!-- TABEL PESANAN -->
+        <div class="bg-white border border-pink-100 rounded-3xl shadow-sm overflow-hidden">
+            <div class="p-6 border-b border-pink-100 flex justify-between items-center">
+                <h2 class="text-xl font-extrabold text-rose-950">📋 Daftar Pesanan Masuk</h2>
+            </div>
+            
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm text-slate-700">
-                    <thead class="bg-pink-50 text-pink-800 uppercase text-[11px] tracking-wider border-b border-pink-100">
-                        <tr>
-                            <th class="p-4 rounded-tl-2xl">Pembeli & Barang</th>
-                            <th class="p-4">Kota Tujuan</th>
-                            <th class="p-4">Est. Harga & Fee</th>
-                            <th class="p-4">Update Progress</th>
-                            <th class="p-4 text-center rounded-tr-2xl">Klaim Pesanan</th>
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-pink-50/50 text-slate-500 text-sm">
+                            <th class="py-4 px-6 font-semibold">Barang & Pembeli</th>
+                            <th class="py-4 px-6 font-semibold">Trip / Kategori</th>
+                            <th class="py-4 px-6 font-semibold">Status</th>
+                            <th class="py-4 px-6 font-semibold">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
-                        @php
-                            $requests = App\Models\ItemRequest::with('user', 'trip')->latest()->get();
-                        @endphp
-                        @forelse($requests as $req)
+                    <tbody class="divide-y divide-pink-50">
+                        @forelse($requests ?? [] as $req)
                             <tr class="hover:bg-pink-50/30 transition">
-                                <td class="p-4 font-extrabold text-rose-950">
-                                    {{ $req->user->name ?? 'Pembeli' }} <br> 
-                                    <span class="text-xs text-slate-500 font-medium">{{ $req->nama_barang }} ({{ $req->jumlah }} pcs)</span>
+                                <td class="py-4 px-6">
+                                    <p class="font-bold text-rose-950">{{ $req->nama_barang }}</p>
+                                    <p class="text-xs text-slate-500">Oleh: {{ $req->user->name ?? 'Pembeli' }}</p>
                                 </td>
-                                <td class="p-4 font-semibold text-slate-600">🏙️ {{ $req->destinasi }}</td>
-                                <td class="p-4 font-bold text-pink-600">Rp {{ number_format($req->estimasi_harga * $req->jumlah, 0, ',', '.') }}</td>
-                                <td class="p-4">
-                                    @if($req->status == 'diterima')
-                                        <form action="/request/progress/{{ $req->id }}" method="POST" class="flex items-center gap-2">
-                                            @csrf
-                                            <select name="progress_status" onchange="this.form.progress_percent.value = this.options[this.selectedIndex].dataset.pct" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 font-medium focus:outline-none focus:border-pink-500">
-                                                <option value="Menuju Toko" data-pct="25" {{ $req->progress_status == 'Menuju Toko' ? 'selected' : '' }}>🚶‍♂️ Menuju Toko</option>
-                                                <option value="Barang Dibeli" data-pct="50" {{ $req->progress_status == 'Barang Dibeli' ? 'selected' : '' }}>🛍️ Barang Dibeli</option>
-                                                <option value="Dikemas & Ready" data-pct="75" {{ $req->progress_status == 'Dikemas & Ready' ? 'selected' : '' }}>📦 Dikemas</option>
-                                                <option value="Selesai / Dikirim" data-pct="100" {{ $req->progress_status == 'Selesai / Dikirim' ? 'selected' : '' }}>🚗 Selesai / Kirim</option>
-                                            </select>
-                                            <input type="hidden" name="progress_percent" value="{{ $req->progress_percent }}">
-                                            <button type="submit" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-xl text-xs font-bold transition">Update</button>
-                                        </form>
+                                <td class="py-4 px-6">
+                                    <p class="font-semibold text-slate-700 capitalize">{{ $req->trip->destinasi ?? '-' }}</p>
+                                </td>
+                                <td class="py-4 px-6">
+                                    @if($req->status === 'menunggu')
+                                        <span class="bg-slate-100 text-slate-700 text-xs font-bold px-3 py-1 rounded-full">Request Baru</span>
+                                    @elseif($req->status === 'menunggu_pembayaran')
+                                        <span class="bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1 rounded-full">Menunggu Bayar</span>
+                                    @elseif($req->status === 'diproses')
+                                        <span class="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">Sedang Diproses</span>
                                     @else
-                                        <span class="text-xs text-slate-400 italic">Klaim dulu pesanan ini</span>
+                                        <span class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">Selesai</span>
                                     @endif
                                 </td>
-                                <td class="p-4 text-center">
-                                    @if($req->status == 'menunggu')
-                                        <form action="/request/accept/{{ $req->id }}" method="POST">
+                                <td class="py-4 px-6">
+                                    @if($req->status === 'menunggu')
+                                        <div class="flex gap-2">
+                                            <form action="/request/accept/{{ $req->id }}" method="POST">
+                                                @csrf <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">Terima</button>
+                                            </form>
+                                            <form action="/request/reject/{{ $req->id }}" method="POST">
+                                                @csrf <button type="submit" class="bg-rose-500 hover:bg-rose-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">Tolak</button>
+                                            </form>
+                                        </div>
+                                    @elseif($req->status === 'menunggu_pembayaran')
+                                        <span class="text-xs text-slate-400 font-semibold italic">Menunggu Pembeli Bayar</span>
+                                    @elseif($req->status === 'diproses')
+                                        <form action="/request/progress/{{ $req->id }}" method="POST" class="flex flex-col gap-2">
                                             @csrf
-                                            <button type="submit" class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-xl text-xs font-bold transition shadow-md shadow-pink-500/20">Ambil Pesanan</button>
+                                            <select name="progress_status" class="text-xs border border-slate-200 rounded px-2 py-1">
+                                                <option value="Menuju Toko" {{ $req->progress_status == 'Menuju Toko' ? 'selected' : '' }}>Menuju Toko</option>
+                                                <option value="Sedang Membeli" {{ $req->progress_status == 'Sedang Membeli' ? 'selected' : '' }}>Sedang Membeli</option>
+                                                <option value="Dikirim" {{ $req->progress_status == 'Dikirim' ? 'selected' : '' }}>Dikirim</option>
+                                                <option value="Selesai">Selesai (Akhiri Pesanan)</option>
+                                            </select>
+                                            <input type="hidden" name="progress_percent" value="50">
+                                            <input type="text" name="no_resi" placeholder="Input No Resi (Jika ada)..." value="{{ $req->no_resi }}" class="text-xs border border-slate-200 rounded px-2 py-1">
+                                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-[10px] font-bold transition">Update Status</button>
                                         </form>
                                     @else
-                                        <span class="text-xs text-emerald-600 font-extrabold bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100">Diproses Tim</span>
+                                        <span class="text-xs text-slate-400 font-semibold italic">Selesai</span>
                                     @endif
                                 </td>
                             </tr>
                         @empty
-                            <tr><td colspan="5" class="p-12 text-center text-slate-500">Belum ada request pesanan masuk.</td></tr>
+                            <tr>
+                                <td colspan="4" class="py-12 text-center text-slate-500">Belum ada pesanan masuk.</td>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
         </div>
 
-    </div>
+    </main>
 </body>
 </html>

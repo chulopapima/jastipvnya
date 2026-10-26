@@ -3,69 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masuk — JastipKita</title>
+    <title>Login - JastipKita</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .animate-blob {
+            animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+            animation-delay: 4s;
+        }
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+    </style>
 </head>
-<body class="bg-white text-slate-800 antialiased selection:bg-pink-500 selection:text-white flex min-h-screen">
-
-    <div class="w-full lg:w-1/2 flex flex-col justify-center px-8 sm:px-16 md:px-24 lg:px-32 py-12">
-        <div class="w-full max-w-sm mx-auto space-y-8">
-            <div>
-                <a href="/" class="inline-flex items-center gap-3 mb-8 hover:opacity-80 transition">
-                    <img src="{{ asset('images/logo.jpg') }}" alt="Logo JastipKita" class="w-12 h-12 rounded-xl object-cover shadow-sm border border-pink-100">
-                    <span class="text-xl font-extrabold text-rose-950 tracking-tight">Jastip<span class="text-pink-500">Kita</span></span>
-                </a>
-                <h1 class="text-3xl font-extrabold text-rose-950 tracking-tight">Selamat Datang!</h1>
-                <p class="text-slate-500 mt-2 text-sm">Silakan masuk ke akun Anda untuk melanjutkan.</p>
-            </div>
-
-            @if(session('error'))
-                <div class="bg-rose-50 border border-rose-200 text-rose-700 p-4 rounded-xl text-sm font-medium">
-                    ✖ {{ session('error') }}
-                </div>
-            @endif
-            @if(session('success'))
-                <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 p-4 rounded-xl text-sm font-medium">
-                    ✔ {{ session('success') }}
-                </div>
-            @endif
-
-            <form action="/login" method="POST" class="space-y-5">
-                @csrf
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Alamat Email</label>
-                    <input type="email" name="email" required placeholder="nama@email.com" class="w-full px-4 py-3 bg-pink-50/50 border border-pink-100 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition text-sm">
-                </div>
-                
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Password</label>
-                    <input type="password" name="password" required placeholder="••••••••" class="w-full px-4 py-3 bg-pink-50/50 border border-pink-100 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition text-sm">
-                </div>
-
-                <button type="submit" class="w-full bg-pink-500 hover:bg-pink-600 text-white py-3.5 rounded-xl font-bold text-sm transition shadow-lg shadow-pink-500/20 mt-4">
-                    Masuk Sekarang
-                </button>
-            </form>
-
-            <p class="text-center text-sm text-slate-500">
-                Belum punya akun? <a href="/register" class="text-pink-600 font-bold hover:underline">Daftar di sini</a>
-            </p>
-        </div>
+<body class="bg-gradient-to-br from-pink-50 via-white to-rose-100 flex items-center justify-center min-h-screen antialiased selection:bg-pink-500 selection:text-white p-6 relative overflow-hidden">
+    
+    <!-- Dekorasi Background -->
+    <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
+        <div class="absolute -top-20 -left-20 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-2xl opacity-50 animate-blob"></div>
+        <div class="absolute top-40 -right-20 w-72 h-72 bg-rose-200 rounded-full mix-blend-multiply filter blur-2xl opacity-50 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-32 left-1/2 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-2xl opacity-50 animate-blob animation-delay-4000"></div>
     </div>
 
-    <!-- GAMBAR PESAWAT TETAP ADA -->
-    <div class="hidden lg:block lg:w-1/2 relative overflow-hidden">
-        <img src="{{ asset('images/pesawat.jpg') }}" alt="Pesawat" class="absolute inset-0 w-full h-full object-cover">
-        <div class="absolute inset-0 bg-gradient-to-t from-rose-950/95 via-rose-900/60 to-transparent"></div>
+    <!-- Kotak Login -->
+    <div class="bg-white/80 backdrop-blur-xl p-10 rounded-[2.5rem] shadow-2xl shadow-pink-900/10 w-full max-w-md border border-pink-100 relative">
         
-        <div class="absolute bottom-0 left-0 p-16 w-full text-white space-y-3">
-            <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full border border-white/30 font-semibold uppercase tracking-wider mb-2">
-                Terpercaya 🌍
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-pink-100 to-pink-200 rounded-2xl mb-4 shadow-sm border border-pink-200">
+                <span class="text-3xl">🛍️</span>
             </div>
-            <h2 class="text-3xl lg:text-4xl font-extrabold tracking-tight leading-snug">Jembatan Belanja Anda.</h2>
-            <p class="text-pink-100 max-w-md leading-relaxed text-sm lg:text-base">Titip barang antar kota dengan aman, transparan, dan pantau secara real-time bersama JastipKita.</p>
+            <h2 class="text-3xl font-extrabold text-rose-950 tracking-tight">Jastip<span class="text-pink-500">Kita</span></h2>
+            <p class="text-slate-500 text-sm mt-2 font-medium">Selamat datang kembali! Silakan masuk.</p>
         </div>
-    </div>
 
+        @if($errors->any())
+            <div class="bg-rose-100 border border-rose-200 text-rose-700 px-4 py-3 rounded-xl mb-6 text-sm font-semibold flex items-center gap-2">
+                <span>⚠️</span> {{ $errors->first() }}
+            </div>
+        @endif
+
+        <form action="{{ url('/login') }}" method="POST" class="space-y-5">
+            @csrf
+            <div>
+                <label class="block text-slate-700 text-sm font-bold mb-2 ml-1">Alamat Email</label>
+                <input type="email" name="email" required class="w-full px-4 py-3.5 bg-white/50 border border-pink-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all font-medium text-slate-700 shadow-sm" placeholder="contoh@gmail.com">
+            </div>
+            
+            <div>
+                <label class="block text-slate-700 text-sm font-bold mb-2 ml-1">Password</label>
+                <input type="password" name="password" required class="w-full px-4 py-3.5 bg-white/50 border border-pink-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all font-medium text-slate-700 shadow-sm" placeholder="••••••••">
+            </div>
+
+            <div class="pt-3">
+                <button type="submit" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-4 rounded-2xl transition-all duration-300 shadow-lg shadow-pink-500/30 transform hover:-translate-y-1">
+                    Masuk ke Akun
+                </button>
+            </div>
+        </form>
+
+        <!-- Informasi Akun Dummy -->
+        <div class="mt-8 pt-6 border-t border-pink-100/60 text-center">
+            <p class="text-xs text-slate-400 font-semibold mb-3">Gunakan akun demo berikut:</p>
+            <div class="flex justify-center gap-3 text-[11px] font-bold">
+                <span class="bg-pink-50 text-pink-600 px-3 py-1.5 rounded-xl border border-pink-100">Pembeli@gmail.com</span>
+                <span class="bg-blue-50 text-blue-600 px-3 py-1.5 rounded-xl border border-blue-100">jastiper@gmail.com</span>
+            </div>
+            <p class="text-[11px] text-slate-400 font-semibold mt-3">Password untuk keduanya: <span class="text-slate-600 font-bold bg-slate-100 px-2 py-0.5 rounded">123</span></p>
+        </div>
+
+    </div>
 </body>
 </html>
